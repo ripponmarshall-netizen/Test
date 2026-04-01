@@ -1,0 +1,5 @@
+{
+  "name": "AI Consensus Lab",
+  "description": "Compare and verify responses from multiple Gemini models to find the most accurate answer.",
+  "requestFramePermissions": []
+}
