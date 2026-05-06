@@ -207,6 +207,11 @@ export class DerivApiClient extends EventEmitter {
         if (poc) this.emit('contract_update', poc);
         break;
       }
+      case 'balance': {
+        const bal = msg.balance as { balance: number; currency: string; loginid: string } | undefined;
+        if (bal) this.emit('balance', bal.balance);
+        break;
+      }
       default:
         break;
     }
@@ -231,6 +236,7 @@ export class DerivApiClient extends EventEmitter {
     };
     this.emit('status', 'authorized');
     this.emit('account', accountInfo);
+    this.getBalance();
     return accountInfo;
   }
 

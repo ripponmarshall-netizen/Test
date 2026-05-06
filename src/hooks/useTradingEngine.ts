@@ -156,11 +156,11 @@ export function useTradingEngine(settings: TradeSettings): TradingEngine {
         managerRef.current = manager;
         manager.onUpdate(() => refreshStats());
         refreshStats();
-        setupSubscriptions(api, selectedGranularity);
       }
     });
 
     api.on('account', (info: unknown) => setAccount(info as AccountInfo));
+    api.on('balance', (bal: unknown) => setAccount(prev => prev ? { ...prev, balance: bal as number } : prev));
 
     setConnectionStatus('connecting');
     try {
