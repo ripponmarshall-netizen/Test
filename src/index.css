@@ -93,6 +93,10 @@
 
   .btn-primary:hover { opacity: 0.85; }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 
   .btn-danger {
     background-color: rgba(220, 38, 38, 0.2);
@@ -107,6 +111,10 @@
   }
 
   .btn-danger:hover { background-color: rgba(220, 38, 38, 0.35); }
+  .btn-danger:focus-visible {
+    outline: 2px solid var(--color-loss);
+    outline-offset: 2px;
+  }
 
   .btn-success {
     background-color: rgba(22, 163, 74, 0.2);
@@ -121,6 +129,10 @@
   }
 
   .btn-success:hover { background-color: rgba(22, 163, 74, 0.35); }
+  .btn-success:focus-visible {
+    outline: 2px solid var(--color-profit);
+    outline-offset: 2px;
+  }
 
   .input-field {
     background-color: var(--color-bg-dark);
@@ -135,6 +147,11 @@
   }
 
   .input-field:focus { border-color: var(--color-accent); }
+  .input-field:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-accent);
+  }
 
   .label {
     font-size: 0.6875rem;

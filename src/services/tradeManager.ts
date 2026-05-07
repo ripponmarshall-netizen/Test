@@ -85,8 +85,8 @@ export class TradeManager {
     }
 
     const openTrades = todayTrades.filter(t => t.status === 'open' || t.status === 'pending');
-    if (openTrades.length >= 2) {
-      return { allowed: false, reason: 'Max concurrent open trades reached' };
+    if (openTrades.length >= this.settings.maxConcurrentTrades) {
+      return { allowed: false, reason: `Max concurrent open trades reached (${this.settings.maxConcurrentTrades})` };
     }
 
     return { allowed: true };

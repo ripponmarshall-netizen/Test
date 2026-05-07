@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { TradeLog } from '@/src/types';
 
 interface Props {
@@ -24,14 +25,26 @@ function exportCSV(trades: TradeLog[]) {
   URL.revokeObjectURL(url);
 }
 
+const BODY_ID = 'panel-history-body';
+
 export function TradeHistory({ trades, onClear }: Props) {
   const [showAll, setShowAll] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const displayed = showAll ? trades : trades.slice(0, 50);
 
   return (
     <div className="panel flex flex-col h-full overflow-hidden">
-      <div className="flex items-center justify-between p-3 border-b border-[var(--color-border)]">
-        <span className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Trade History ({trades.length})</span>
+      <div className="flex items-center justify-between p-3 border-b border-[var(--color-border)] gap-2">
+        <button
+          type="button"
+          aria-expanded={!collapsed}
+          aria-controls={BODY_ID}
+          onClick={() => setCollapsed(c => !c)}
+          className="flex items-center gap-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+        >
+          <span className="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Trade History ({trades.length})</span>
+          {collapsed ? <ChevronDown size={14} aria-hidden="true" /> : <ChevronUp size={14} aria-hidden="true" />}
+        </button>
         <div className="flex gap-2">
           {trades.length > 0 && (
             <>
@@ -41,23 +54,23 @@ export function TradeHistory({ trades, onClear }: Props) {
           )}
         </div>
       </div>
-      <div className="overflow-auto flex-1 scrollbar-thin">
+      <div id={BODY_ID} hidden={collapsed} className="overflow-auto flex-1 scrollbar-thin">
         {trades.length === 0 ? (
           <div className="flex items-center justify-center h-20 text-xs text-[var(--color-text-secondary)]">No trades yet</div>
         ) : (
-          <table className="w-full text-xs">
+          <table className="w-full min-w-[640px] text-xs">
             <thead className="sticky top-0 bg-[var(--color-bg-panel)]">
               <tr className="text-[var(--color-text-secondary)] border-b border-[var(--color-border)]">
-                <th className="text-left p-2 font-medium">Time</th>
-                <th className="text-left p-2 font-medium">Symbol</th>
-                <th className="text-left p-2 font-medium">Dir</th>
-                <th className="text-right p-2 font-medium">Stake</th>
-                <th className="text-right p-2 font-medium">Entry</th>
-                <th className="text-right p-2 font-medium">Exit</th>
-                <th className="text-right p-2 font-medium">P&L</th>
-                <th className="text-right p-2 font-medium">Conf</th>
-                <th className="text-left p-2 font-medium">Status</th>
-                <th className="text-left p-2 font-medium">Reason</th>
+                <th scope="col" className="text-left p-2 font-medium">Time</th>
+                <th scope="col" className="text-left p-2 font-medium">Symbol</th>
+                <th scope="col" className="text-left p-2 font-medium">Dir</th>
+                <th scope="col" className="text-right p-2 font-medium">Stake</th>
+                <th scope="col" className="text-right p-2 font-medium">Entry</th>
+                <th scope="col" className="text-right p-2 font-medium">Exit</th>
+                <th scope="col" className="text-right p-2 font-medium">P&L</th>
+                <th scope="col" className="text-right p-2 font-medium">Conf</th>
+                <th scope="col" className="text-left p-2 font-medium">Status</th>
+                <th scope="col" className="text-left p-2 font-medium">Reason</th>
               </tr>
             </thead>
             <tbody>
@@ -66,7 +79,7 @@ export function TradeHistory({ trades, onClear }: Props) {
                 const statusColor = trade.status === 'won' ? 'text-green-400' : trade.status === 'lost' ? 'text-red-400' : trade.status === 'open' ? 'text-yellow-400' : 'text-[var(--color-text-secondary)]';
                 return (
                   <tr key={trade.id} className="border-b border-[var(--color-border)]/50 hover:bg-white/5">
-                    <td className="p-2 font-mono text-[var(--color-text-secondary)]">{new Date(trade.timestamp).toLocaleTimeString()}</td>
+                    <td className="p-2 font-mono text-[var(--color-text-secondary)] whitespace-nowrap">{new Date(trade.timestamp).toLocaleTimeString()}</td>
                     <td className="p-2 text-[var(--color-text-secondary)]">{trade.symbol}</td>
                     <td className="p-2"><span className={`px-1.5 py-0.5 rounded text-xs font-bold ${trade.direction === 'CALL' ? 'badge-call' : 'badge-put'}`}>{trade.direction}</span></td>
                     <td className="p-2 text-right font-mono text-[var(--color-text-primary)]">$ {trade.stake.toFixed(2)}</td>
@@ -83,7 +96,7 @@ export function TradeHistory({ trades, onClear }: Props) {
           </table>
         )}
       </div>
-      {!showAll && trades.length > 50 && (
+      {!collapsed && !showAll && trades.length > 50 && (
         <div className="p-2 border-t border-[var(--color-border)] text-center">
           <button className="text-xs text-[var(--color-accent)] hover:underline" onClick={() => setShowAll(true)}>Show all {trades.length} trades</button>
         </div>
