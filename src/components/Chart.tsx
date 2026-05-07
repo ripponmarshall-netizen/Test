@@ -218,7 +218,13 @@ export function Chart({ candles, indicators, selectedGranularity, onGranularityC
         </div>
       </div>
       <div ref={containerRef} className="flex-1 relative">
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ display: 'block' }} />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full"
+          style={{ display: 'block' }}
+          role="img"
+          aria-label={`Price chart at ${TIMEFRAMES.find(tf => tf.granularity === selectedGranularity)?.label ?? ''} timeframe with ${candles.length} candles`}
+        />
       </div>
     </div>
   );

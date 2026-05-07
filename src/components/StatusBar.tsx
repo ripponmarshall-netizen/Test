@@ -1,3 +1,4 @@
+import { Menu } from 'lucide-react';
 import type { BotStatus, DailyStats, TradeSettings } from '@/src/types';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   limitReason: string | null;
   onStart: () => void;
   onStop: () => void;
+  onMenuClick?: () => void;
 }
 
 const STATUS_CONFIG: Record<BotStatus, { label: string; color: string; bg: string }> = {
@@ -18,7 +20,7 @@ const STATUS_CONFIG: Record<BotStatus, { label: string; color: string; bg: strin
   limit_reached: { label: 'LIMIT HIT', color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
 };
 
-export function StatusBar({ botStatus, dailyStats, settings, isConnected, limitReason, onStart, onStop }: Props) {
+export function StatusBar({ botStatus, dailyStats, settings, isConnected, limitReason, onStart, onStop, onMenuClick }: Props) {
   const cfg = STATUS_CONFIG[botStatus];
   const isRunning = botStatus === 'running';
   const pnlColor = dailyStats.totalPnl >= 0 ? 'var(--color-profit)' : 'var(--color-loss)';
@@ -29,6 +31,16 @@ export function StatusBar({ botStatus, dailyStats, settings, isConnected, limitR
 
   return (
     <div className="bg-[var(--color-bg-panel)] border-b border-[var(--color-border)] px-4 py-2 flex items-center gap-4 flex-wrap">
+      {onMenuClick && (
+        <button
+          type="button"
+          onClick={onMenuClick}
+          aria-label="Open settings drawer"
+          className="lg:hidden p-1.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+        >
+          <Menu size={18} aria-hidden="true" />
+        </button>
+      )}
       <div className="flex items-center gap-2">
         <div className="px-2 py-0.5 rounded text-xs font-bold" style={{ color: cfg.color, backgroundColor: cfg.bg }}>{cfg.label}</div>
         {limitReason && <span className="text-xs text-orange-400 hidden sm:block">{limitReason}</span>}

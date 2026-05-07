@@ -118,6 +118,7 @@ export interface TradeSettings {
   maxDailyLoss: number;
   maxDailyProfit: number;
   maxDailyTrades: number;
+  maxConcurrentTrades: number;
   autoTrade: boolean;
   symbol: string;
   entryGranularity: Granularity;
@@ -133,6 +134,7 @@ export const DEFAULT_SETTINGS: TradeSettings = {
   maxDailyLoss: 50,
   maxDailyProfit: 100,
   maxDailyTrades: 20,
+  maxConcurrentTrades: 2,
   autoTrade: false,
   entryGranularity: 60,
 };
